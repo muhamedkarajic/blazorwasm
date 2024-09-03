@@ -2,17 +2,20 @@
 
 <PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
+@inject SharedStateService SharedState
 
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<h3>Component 2</h3>
+<p>Shared Data: @_currentValue</p>
 
 @code {
-    private int currentCount = 0;
+    private string _currentValue;
 
-    private void IncrementCount()
+    protected override void OnInitialized()
     {
-        currentCount++;
+        SharedState.value.Subscribe(value =>
+        {
+            _currentValue = value;
+            InvokeAsync(StateHasChanged); // Notify the component to re-render
+        });
     }
 }
